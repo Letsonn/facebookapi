@@ -18,22 +18,22 @@
 
         // Add the Facebook SDK for Javascript
 
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) { return; }
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk')
-        );
+        // (function (d, s, id) {
+        //     var js, fjs = d.getElementsByTagName(s)[0];
+        //     if (d.getElementById(id)) { return; }
+        //     js = d.createElement(s); js.id = id;
+        //     js.src = "https://connect.facebook.net/en_US/sdk.js";
+        //     fjs.parentNode.insertBefore(js, fjs);
+        // }(document, 'script', 'facebook-jssdk')
+        // );
 
-        window.fbAsyncInit = function () {
-            // Initialize the SDK with your app and the Graph API version for your app
-            FB.init({
-                appId: '857370649737930',
-                xfbml: true,
-                version: 'v19.0'
-            });
+        // window.fbAsyncInit = function () {
+        //     // Initialize the SDK with your app and the Graph API version for your app
+        //     FB.init({
+        //         appId: '857370649737930',
+        //         xfbml: true,
+        //         version: 'v19.0'
+        //     });
             // If you are logged in, automatically get your name and email adress, your public profile information-- >
             // FB.login(function (response) {
             //     if (response.authResponse) {
@@ -46,7 +46,7 @@
             //         console.log('User cancelled login or did not fully authorize.');
             //     }
             // });
-        };
+        // };
     </script>
 
     <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
