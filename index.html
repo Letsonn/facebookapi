@@ -47,9 +47,70 @@
             //     }
             // });
         };
+
+        // Handle WhatsApp Signup
+        function launchEmbeddedSignup() {
+            // Launch Facebook login
+            FB.login(
+                function (response) {
+                    // Since you are using Twilio's APIs, you do not need to do anything with the response here.
+                },
+                {
+                    config_id: "7423116761101835",
+                    auth_type: "rerequest", // avoids "user is already logged" in errors if users click the button again before refreshing the page
+                    response_type: "code",
+                    override_default_response_type: true,
+                    extras: {
+                        sessionInfoVersion: 2, // required to get WABA ID
+                        // leave below commented for now, you will need to replace this once your app is approved by Meta
+                        // setup: {
+                        //   solutionID: SOLUTION_ID, 
+                        // }
+                    }
+                }
+            );
+        }
+
+        // define session handler
+        const embeddedSignupInfoListener = (event) => {
+            if (event.origin !== "https://www.facebook.com") return;
+            try {
+                const data = JSON.parse(event.data);
+                if (data.type === "WA_EMBEDDED_SIGNUP") {
+                    // if user finishes the Embedded Signup flow and the popup window closes
+                    if (data.event === "FINISH" || data.event === "FINISH_ONLY_WABA") {
+                        const { phone_number_id, waba_id } = data.data;
+                        console.log({ phone_number_id, waba_id });
+                        // For now, you do not need to do anything here. Once App Review has been completed, then you
+                        // will pass this data to your backend service and use Twilio's Senders API to register the number.
+                    }
+                    else {
+                        // otherwise the user canceled the Embedded Signup flow by closing the popup window before the last step
+                        // we recommend you show an error here
+                        const { current_step } = data.data;
+                        console.log(`User did not finish ESU. Last step: ${current_step}`);
+                    }
+                }
+            } catch {
+                return;
+            }
+        };
+
+        // listen for embedded signup events
+        window.addEventListener("message", embeddedSignupInfoListener);
+
+        // when the user navigates away from the page, you should remove the event listener
+        window.removeEventListener("message", embeddedSignupInfoListener);
+
     </script>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
     <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+
+    <button onclick="launchEmbeddedSignup()"
+        style="background-color: #1877f2; border: 0; border-radius: 4px; color: #fff; cursor: pointer; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: bold; height: 40px; padding: 0 24px;">
+        Login with Facebook
+    </button>
 
 </body>
 
